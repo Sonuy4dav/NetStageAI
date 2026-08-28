@@ -1,3 +1,6 @@
 """Streamlit Cloud launcher for the packaged application."""
 
-from src import app as _app  # noqa: F401
+import runpy
+
+
+runpy.run_module("src.app", run_name="__main__")
