@@ -8,6 +8,54 @@ decisions.
 The application is a read-only diagnostic demonstrator. It does not connect to
 network devices or execute the commands it displays.
 
+GitHub: https://github.com/Sonuy4dav/NetStageAI
+
+Live demo: https://netstageai-htxgv8tsayvsrtetxv2v7c.streamlit.app/
+
+## Problem statement
+
+Network troubleshooting often requires correlating CLI evidence with known
+configuration faults and documenting the operator's decision. NetStage AI
+provides a small, auditable workflow for predefined Cisco IOS and Packet Tracer
+cases without changing a real device.
+
+## Features
+
+- 30 validated diagnostic cases loaded from CSV
+- Deterministic Cisco rule engine with evidence, severity, confidence, and OSI layer
+- Safe fallback behavior for unknown, incomplete, conflicting, or unavailable diagnoses
+- Human-in-the-loop approval, rejection, and command editing
+- Append-only Markdown audit records
+- Secret redaction and bounded CLI input handling
+
+## Architecture and technical approach
+
+The Streamlit UI in `src/app.py` loads the dataset through `src/dataset.py`,
+evaluates CLI evidence with `src/checker.py`, and orchestrates typed diagnoses
+through `src/engine.py` and `src/models.py`. The repository-root `app.py` is the
+Streamlit Cloud launcher and executes the packaged UI module with the correct
+import path.
+
+The rule engine is the primary diagnostic path. It matches specific known
+patterns and returns supporting CLI evidence, proposed commands, severity,
+confidence, and OSI layer. Multiple matches produce a conflict diagnosis with
+no automatic fix. A no-match result is explicitly not proof that the network is
+healthy.
+
+The LLM layer is provider-neutral and currently disabled. `src/llm.py` builds a
+sanitized, structured prompt and strictly validates JSON responses, while
+`system_config.json` keeps deterministic-only mode enabled. No model API is
+called by the deployed application.
+
+Evidence is grounded in the selected case's sanitized CLI output and the
+deterministic rule result. Proposed commands are display-only. The HITL flow
+requires an explicit review confirmation before approval or rejection, and
+records edits and decisions for auditability.
+
+## Tech stack
+
+Python 3.10+, Streamlit, pandas, CSV, JSON, pathlib, Markdown, and unittest.
+
 ## Requirements
 
 - Python 3.10 or newer
@@ -54,7 +102,7 @@ Fix**. Decisions are appended to `docs/model_audit_log.md`.
 To run without opening a browser:
 
 ```powershell
-python -m streamlit run src/app.py --server.headless true --server.port 8501
+python -m streamlit run app.py --server.headless true --server.port 8501
 ```
 
 ## Deploy on Streamlit Community Cloud
@@ -198,6 +246,13 @@ back to a zero-confidence diagnosis requiring human investigation.
   proof that a network is healthy.
 - A model diagnosis can be wrong or incomplete. Verify evidence and commands
   against the lab topology and device documentation before applying anything.
+
+## Future scope
+
+- Add a tested provider adapter behind the existing LLM interface.
+- Replace local Markdown audit storage with durable external persistence.
+- Support controlled user-supplied cases and richer evidence review.
+- Add broader rule coverage and automated quality reporting.
 
 ## Testing
 
