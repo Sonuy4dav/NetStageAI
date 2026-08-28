@@ -1,0 +1,9 @@
+{
+    "application_name": "NetStage AI",
+    "environment": "development",
+    "llm_enabled": false,
+    "deterministic_only": true,
+    "llm_timeout_seconds": 30,
+    "max_cli_output_chars": 12000,
+    "audit_log_path": "docs/model_audit_log.md"
+}
