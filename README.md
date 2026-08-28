@@ -43,7 +43,7 @@ python -m pip install -r requirements.txt
 Start the application from the repository root:
 
 ```powershell
-python -m streamlit run src/app.py
+python -m streamlit run app.py
 ```
 
 Streamlit prints a local URL, normally `http://localhost:8501`. Open it in a
@@ -62,7 +62,7 @@ python -m streamlit run src/app.py --server.headless true --server.port 8501
 1. Create a public or private GitHub repository and push this project from its
 	root directory.
 2. In Streamlit Community Cloud, choose **Create app**, select the repository
-	and branch, and set the main file to `src/app.py`.
+	and branch, and set the main file to `app.py`.
 3. Use Python 3.10 or newer in the app's advanced settings. Streamlit Cloud
 	installs the packages from `requirements.txt` automatically.
 4. Deploy with `system_config.json` left in deterministic-only mode. The
