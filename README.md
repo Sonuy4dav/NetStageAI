@@ -8,8 +8,6 @@ decisions.
 The application is a read-only diagnostic demonstrator. It does not connect to
 network devices or execute the commands it displays.
 
-GitHub: https://github.com/Sonuy4dav/NetStageAI
-
 Live demo: https://netstageai-htxgv8tsayvsrtetxv2v7c.streamlit.app/
 
 ## Problem statement
